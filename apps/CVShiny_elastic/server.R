@@ -358,7 +358,7 @@ shinyServer(function(input, output, session) {
     other_medically_imp_cond <- other_medically_imp_cond[(other_medically_imp_cond$category =="true"),]
     other_medically_imp_cond[1,1] <- 'Other Medically Important Condition'
 
-    serious_reasons <-do.call(rbind,list(congenital_anomaly,death,life_threatening,hosp_required,disability,other_medically_imp_cond))
+    serious_reasons <-do.call(rbind,list(death,life_threatening,hosp_required,disability,congenital_anomaly,other_medically_imp_cond))
     serious_reasons[nrow(serious_reasons) + 1,] = list("Not Specified",nreports()-sum(serious_reasons$doc_count))
     serious_reasons$doc_count<-ifelse(serious_reasons$doc_count<0,0,serious_reasons$doc_count)
     
