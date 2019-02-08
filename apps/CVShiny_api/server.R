@@ -18,7 +18,7 @@ shinyServer(function(input, output, session) {
   updateSelectizeInput(session, 'search_rxn', choices = pt_choices, server = TRUE)
   updateSelectizeInput(session, 'search_soc', choices = soc_choices, server = TRUE)
   
-  observe({
+  observeEvent(input$search_drug,{
     search_text<-input$search_drug
     text_query<-paste0(search_text,'*')
   
@@ -319,10 +319,10 @@ shinyServer(function(input, output, session) {
     df<-timeplot()%>%
         mutate(`Serious(Including Death)`=Death+`Serious(Excluding Death)`)%>%
         select(time_period,input$column_time)
-    
+
     DT::datatable(df)
   })
-  
+
   
   ##### Data about Reports
   

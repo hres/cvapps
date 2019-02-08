@@ -47,7 +47,7 @@ dashboardPage(
                      c("Brand Name" = "brand",
                        "Active Ingredient" = "ingredient"))),
     
-    textInput('search_drug','Type in a brand or ingredient to start:'),
+    textInput('search_drug','Type in a brand or ingredient to start:',value='Start typing...'),
     conditionalPanel(
       condition = "input.name_type == 'brand'",
       # cvshiny_selectinput_UI('search_brand', 'Brand Name (Canadian Trade Name)')),
@@ -134,8 +134,8 @@ dashboardPage(
                             choices=c('Serious(Excluding Death)','Death','Nonserious','Serious(Including Death)'),
                             selected=c('Nonserious','Serious(Including Death)'),
                             multiple = TRUE),
-                            
-             DT::dataTableOutput('tb_main')   
+
+             DT::dataTableOutput('tb_main')
               )),
     tabItems(
       tabItem(tabName = "reportdata",
