@@ -257,6 +257,7 @@ dashboardPage(
                   paste0("<strong>MedDRA Version:", max_meddra, "</strong><br>"),
                   "Data provided by the Canada Vigilance Adverse Reaction Online Database. The recency of the data is therefore ",
                   "dependent on when the data source is updated, and is the responsibility of the Canada Vigilance Program. ",
+                  "Anonymous usage data are collected for application improvement purpose.",
                   "For more information, please refer to ",
                   "<a href = \"https://www.canada.ca/en/health-canada/services/drugs-health-products/medeffect-canada/adverse-reaction-database.html\">",
                   "https://www.canada.ca/en/health-canada/services/drugs-health-products/medeffect-canada/adverse-reaction-database.html</a>.",

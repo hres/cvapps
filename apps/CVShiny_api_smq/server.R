@@ -139,7 +139,7 @@ shinyServer(function(input, output, session) {
                                        current_search$age,current_search$min_age,current_search$max_age,current_search$rxn, current_search$soc, 
                                        current_search$drug_inv, current_search$name, current_search$seriousness_type, 
                                        current_search$name_type)
-      incProgress(4/9, detail = 'Assembling query string')
+      incProgress(3/9, detail = 'Assembling query string')
       # api_key <- api_key
       
       n<-request(current_search$uri)
@@ -269,6 +269,8 @@ shinyServer(function(input, output, session) {
   timeplot<-reactive({
     two_years <- 730
     
+    withProgress(message = 'Calculation in progress', value = 0, {
+    
     if ((current_search$endDate - current_search$startDate) >= two_years) {
       time_period <- "year"
       time_function <- function(x) {years(x)}
@@ -280,6 +282,7 @@ shinyServer(function(input, output, session) {
     dateSequence_start <- get_date_sequence_start(current_search$startDate, current_search$endDate, time_period)
     dateSequence_end <- get_date_sequence_end(current_search$startDate, current_search$endDate, time_period)
     
+    incProgress(3/9, detail = 'Assembling query string')
     data <- get_timechart_data(time_period, dateSequence_start,dateSequence_end, current_search$gender, current_search$age,current_search$min_age,current_search$max_age, current_search$rxn,
                                current_search$soc, current_search$drug_inv, current_search$name, current_search$seriousness_type, current_search$name_type)
     
@@ -289,6 +292,7 @@ shinyServer(function(input, output, session) {
     df <- as.data.frame(t(as.data.frame(time_data))) %>%
       plyr::rename(c('V1' = 'Serious(Excluding Death)', 'V2' = 'Death', 'V3' = 'Nonserious'))
     
+    incProgress(5/9, detail = 'Plotting')
     
     rownames(df) <- c()
     
@@ -305,6 +309,8 @@ shinyServer(function(input, output, session) {
     transform(df, time_period = toString(time_period))
     
     return(df)
+    
+    })
   })
   
   output$mychart <- renderLineChart({
