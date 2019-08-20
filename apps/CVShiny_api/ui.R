@@ -47,17 +47,20 @@ dashboardPage(
                      c("Brand Name" = "brand",
                        "Active Ingredient" = "ingredient"))),
     
-    textInput('search_drug','Type in a brand or ingredient to start:',value='Start typing...'),
     conditionalPanel(
       condition = "input.name_type == 'brand'",
       # cvshiny_selectinput_UI('search_brand', 'Brand Name (Canadian Trade Name)')),
       pickerInput("search_brand",
                      "Select one or multiple Brand Names (Canadian Trade Name)",
-                     c("Start typing to search..." = ""),
-                     options=list(`actions-box`=TRUE,size=5),
+                     c("",topbrands),
+                     options=list(`actions-box`=TRUE,
+                                  `live-search`=TRUE,
+                                  size=5),
+                     choicesOpt = list(content=stringr::str_trunc(topbrands,width=50)),
                      multiple = TRUE)),
     conditionalPanel(
       condition = "input.name_type == 'ingredient'",
+      textInput('search_drug','Type in an ingredient to get synonyms:',value='Start typing...'),
       pickerInput("search_ing", 
                      "Select one or multiple Active Ingredients",
                      c("Start typing to search..." = ""),

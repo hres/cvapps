@@ -19,6 +19,9 @@ shinyServer(function(input, output, session) {
   updateSelectizeInput(session, 'search_soc', choices = soc_choices, server = TRUE)
   
   observeEvent(input$search_drug,{
+    
+    onclick("search_drug",updateTextInput(session,"search_drug",value=""))
+    
     search_text<-input$search_drug
     text_query<-paste0(search_text,'*')
   
@@ -39,13 +42,16 @@ shinyServer(function(input, output, session) {
   
   updatePickerInput(session, 'search_ing', choices = list)
   
-  }else{
-   list<-grep(input$search_drug,topbrands,value=T,ignore.case = T)
-   list<-list%>%unique()
-   list<-list[!is.na(list)]
-  
-   updatePickerInput(session, 'search_brand', choices = list)
   }
+    
+  # if(input$name_type=='brand'){
+  #   
+  #  list<-grep(input$search_drug,topbrands,value=T,ignore.case = T)
+  #  list<-list%>%unique()
+  #  list<-list[!is.na(list)]
+  # 
+  #  updatePickerInput(session, 'search_brand', choices = list)
+  # }
   
     
 })

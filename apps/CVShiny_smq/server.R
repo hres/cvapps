@@ -707,7 +707,7 @@ shinyServer(function(input, output, session) {
     meddra_pt<-sapply(data$category,function(x){sprintf('{
     "_source":"hlt_name","query":{"match":{"pt_name_eng.keyword":{"query":"%s","operator":"and"}}}}',x)})
     
-    res_pt<-lapply(meddra_pt,function(x)Search(index ='meddra',body=x,size=100,raw=T))
+    res_pt<-lapply(meddra_pt,function(x)Search(index ='meddra_pt',body=x,size=100,raw=T))
     
     #extract hlts:
     res_pt<-lapply(res_pt,fromJSON)

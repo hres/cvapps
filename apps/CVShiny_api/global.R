@@ -98,7 +98,9 @@ body_med<-'
   "_source": "reactions.meddra_version",
   "size":1,
   "query":{
-    "match_all": {}
+    "exists": {
+    "field":"reaction_pt"
+    }
   }
 }'
 
