@@ -19,6 +19,7 @@ library(googleVis)
 # Shiny libraries
 library(shiny)
 library(shinydashboard)
+library(shinycssloaders)
 library(shinyBS)
 library(DT)
 library(dplyr)
