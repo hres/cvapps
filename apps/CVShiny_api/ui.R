@@ -99,6 +99,7 @@ dashboardPage(
                    "Preferred Term (PT)",
                    c("Start typing to search..." = ""),
                    multiple = TRUE),
+   
     selectizeInput("search_soc",
                    "System Organ Class (SOC)",
                    c("Start typing to search..." = ""),
@@ -125,7 +126,7 @@ dashboardPage(
     fluidRow(
       box(htmlOutput(outputId = "timeplot_title"),
           #htmlOutput(outputId = "timeplot"),
-          lineChartOutput("mychart"),
+          lineChartOutput("mychart")%>%withSpinner(),
           "Reports by month from Canada Vigilance Adverse Reaction Online Database.",
           htmlOutput(outputId = "search_url"),
           width = 12,solidHeader = TRUE
@@ -144,10 +145,10 @@ dashboardPage(
       tabItem(tabName = "reportdata",
               fluidRow(
                 pieTableUI("Reporter Type","reporterchart","reportertable",paste0("Indicates who reported the adverse reaction and their relationship to the patient. ",
-                                                                                   "Slices may not be visible if they are too small.")),
+                                                                                   "Slices may not be visible if they are too small."))%>%withSpinner(),
                
                 pieTableUI("Seriousness", "seriouschart", "serioustable",paste0("A serious report contains a serious adverse reaction, determined by the reporter ",
-                                                                                 "of the report at the time of reporting. Slices may not be visible if they are too small."))
+                                                                                 "of the report at the time of reporting. Slices may not be visible if they are too small."))%>%withSpinner()
 
               ),
               fluidRow(

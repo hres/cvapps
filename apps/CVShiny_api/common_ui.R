@@ -60,9 +60,10 @@ gvisPieChart_HCSC <- function(data, labelvar, numvar, colors = google_colors) {
 
 titleWarning <- function(title) {
   list(title, span(
-  "WARNING: This is a beta product. DO NOT use", br(),
-  "as sole evidence to support regulatory decisions."))
+    "WARNING: This is a beta product. DO NOT use", br(),
+    "as sole evidence to support regulatory decisions."))
 }
+
 
 customCSS <- function() {
   tags$head(tags$style(HTML('
@@ -91,6 +92,20 @@ http://stackoverflow.com/questions/36314780/shinydashboard-grayed-out-downloadbu
   width: 100% !important;
 }
 ')))
+  
+  
+  
+tags$li(tags$style(HTML('
+  .dropdown {
+   position: absolute;
+   right: 1000 px;
+   color: #FFFFFF;
+   font-weight: bold;
+   font-size: 30 px;
+  }
+  
+  '
+)))
 }
 
 aboutAuthors <- function() {list(

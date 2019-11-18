@@ -17,7 +17,7 @@ shinyServer(function(input, output, session) {
   # updateSelectizeInput(session, 'search_ing', choices = topings_cv, server = TRUE)
   updateSelectizeInput(session, 'search_rxn', choices = pt_choices, server = TRUE)
   updateSelectizeInput(session, 'search_soc', choices = soc_choices, server = TRUE)
-  
+
   observeEvent(input$search_drug,{
     
     onclick("search_drug",updateTextInput(session,"search_drug",value=""))

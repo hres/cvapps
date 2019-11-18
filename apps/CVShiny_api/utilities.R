@@ -1,8 +1,6 @@
-library(lubridate)
 
 #Params: term_list - list of strings
 #Return: or - a single string of all in term_list seperated by +OR+
-
 or_elastic <- function(term_list) {
   or <- "("
   term_list<-paste0('\\\"',term_list,'\\\"')
@@ -26,7 +24,6 @@ or_together <- function(term_list) {
   
   return(or)
 }
-
 
 #escapes the following characters+ - && || ! ( ) { } [ ] ^ " ~ * ? : \ replaces spaces with %20%
 #Params: string - a field that may contain a space "childrens advil"
@@ -110,32 +107,36 @@ create_uri <- function(startDate, endDate, gender='All', age=c(0, 125),min_inclu
 
   search_uri <- 'https://node.hres.ca/drug/event?search='
   
-  #if smq is used in pt term selection:
-  if(any(grepl('(SMQ)',rxn))){
-  #extract all terms with (SMQ):
-  smq_rxn<-grep('(SMQ)',rxn,value=T)
   
-  smq_search<-sapply(smq_rxn,function(x){sprintf('{
+  
+  #if smq is used in pt term selection:
+  
+  if(any(grepl('(SMQ)',rxn))){
+    #extract all terms with (SMQ):
+    smq_rxn<-grep('(SMQ)',rxn,value=T)
+    
+    smq_search<-sapply(smq_rxn,function(x){sprintf('{
   "_source": "pt_name_eng",
   "query": {"match": {"smq_name": {"query": "%s","operator": "and"}}}}',x)})
-  
-  smq_pt<-lapply(smq_search,function(x){Search(index='meddra_pt',body=x,size=300)})
-  
-  #extract all pt terms associated with smq term:
-  smq_pt_res<-list()
-  for (i in seq_along(smq_pt)){
-    smq_pt_res[[i]]<-sapply(smq_pt[[i]]$hits$hits,"[[",c("_source"))%>%unlist(use.names=F)
-  }
-  
-  smq_pt_res<-unlist(smq_pt_res,use.names = F)
-  
-  #replace smq terms with pt terms:
-  rxn<-c(rxn,smq_pt_res)
-  rxn<-rxn[!grepl('(SMQ)',rxn)]%>%unique()
-  
+    
+    smq_pt<-lapply(smq_search,function(x){Search(index='meddra_pt',body=x,size=300)})
+    
+    #extract all pt terms associated with smq term:
+    smq_pt_res<-list()
+    for (i in seq_along(smq_pt)){
+      smq_pt_res[[i]]<-sapply(smq_pt[[i]]$hits$hits,"[[",c("_source"))%>%unlist(use.names=F)
+    }
+    
+    smq_pt_res<-unlist(smq_pt_res,use.names = F)
+    
+    #replace smq terms with pt terms:
+    rxn<-c(rxn,smq_pt_res)
+    rxn<-rxn[!grepl('(SMQ)',rxn)]%>%unique()
+    
   }else{
     rxn<-rxn
   }
+  
   
   
   if(length(drugname) > 1) {
