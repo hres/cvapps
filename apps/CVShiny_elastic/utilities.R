@@ -76,7 +76,7 @@ search_uri <- paste0(
 #defaults are added so that function is reusible for counting (piecharts)
 #Params:
 #Return:
-create_uri <- function(startDate, endDate, gender='All', age=c(0, 125), rxn=NULL, soc=NULL, drug_inv='Any', drugname=NULL, seriousness=NULL, search_type='',exact='exact', ...) {
+create_uri <- function(startDate, endDate, gender='All', age=c(0, 125), rxn=NULL, soc=NULL, drug_inv='Any', drugname=NULL, seriousness=NULL, search_type='') {
 
   
   #if smq is used in pt term selection:
@@ -144,7 +144,7 @@ create_uri <- function(startDate, endDate, gender='All', age=c(0, 125), rxn=NULL
   }
 
   
-if(!is.null(drugname) & exact=='exact'){
+if(!is.null(drugname)){
     
   if(drug_inv == 'Concomitant'){
     
@@ -176,37 +176,6 @@ if(!is.null(drugname) & exact=='exact'){
   }
   
   
-}else if(!is.null(drugname) & exact!='exact'){
-    
-  if(drug_inv == 'Concomitant'){
-    
-    if(search_type== 'brand'){
-      search_uri <- paste0(search_uri, ' AND report_drugname_concomitant:', remove_spaces(drugname))
-    }else{
-      search_uri <- paste0(search_uri, ' AND report_ingredient_concomitant:', remove_spaces(drugname))
-    }
-  }
-  
-  
-  if(drug_inv=='Suspect'){
-    if(search_type=='brand'){
-      search_uri <- paste0(search_uri, ' AND report_drugname_suspect:', remove_spaces(drugname))
-    }else{
-      search_uri <- paste0(search_uri, ' AND report_ingredient_suspect:', remove_spaces(drugname))
-    }
-  }
-  
-  
-  if(drug_inv=='Any'){
-    if(search_type=='brand'){
-      search_uri <- paste0(search_uri, ' AND (report_drugname_suspect:', remove_spaces(drugname),' OR report_drugname_concomitant:',
-                           remove_spaces(drugname),')')
-    }else{
-      search_uri <- paste0(search_uri, ' AND (report_ingredient_suspect:', remove_spaces(drugname),' OR report_ingredient_concomitant:',
-                           remove_spaces(drugname),')')
-    }
-  }
-  
 }
     
 
@@ -227,13 +196,13 @@ if(!is.null(drugname) & exact=='exact'){
 #gets all time chart dat, splits by year and seriousness
 #Params: current_search params - could be refactored to take a list
 #Return: 
-get_timechart_data <- function(time_period,date_start,date_end, gender, age, rxn, soc, drug_inv, drugname, seriousness, name_type,exact, ...){
+get_timechart_data <- function(time_period,date_start,date_end, gender, age, rxn, soc, drug_inv, drugname, seriousness, name_type, ...){
   result <- list()
   
   
   for (i in 1:(length(date_start)- 1)){
 
-        search_uri<- create_uri(date_start[i], date_end[i+1], gender, age, rxn, soc, drug_inv, drugname, seriousness, name_type,exact)
+        search_uri<- create_uri(date_start[i], date_end[i+1], gender, age, rxn, soc, drug_inv, drugname, seriousness, name_type)
         
     search_uri <- add_term(search_uri)
     result[[i]] <- search_uri

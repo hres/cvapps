@@ -21,6 +21,7 @@ library(shiny)
 library(shinydashboard)
 library(shinycssloaders)
 library(shinyBS)
+library(shinyWidgets)
 library(DT)
 library(dplyr)
 library(tidyr)
@@ -41,7 +42,7 @@ source("utilities.R")
 
 
 
-options(shiny.trace=TRUE)
+options(shiny.trace=FALSE)
 # -----------------------------------------------------------------------------
 #The api key isn't necessary right now, but if in the future it is created place here (include full syntax, for example: '&key=a78asdfkad78')
 

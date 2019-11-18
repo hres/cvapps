@@ -41,29 +41,33 @@ dashboardPage(
       menuItem("About", tabName = "aboutinfo", icon = icon("info"), selected = TRUE),
       menuItem("Download", tabName = "download_tab", icon = icon("download"))
     ),
-    conditionalPanel(
-      condition = "input.name_type == 'brand'",
-      # cvshiny_selectinput_UI('search_brand', 'Brand Name (Canadian Trade Name)')),
-      selectizeInput("search_brand",
-                     "Brand Name (Canadian Trade Name)",
-                     c("Start typing to search..." = ""),
-                     multiple = TRUE)),
-    conditionalPanel(
-      condition = "input.name_type == 'ingredient'",
-      selectizeInput("search_ing", 
-                     "Active Ingredient",
-                     c("Start typing to search..." = ""),
-                     multiple = TRUE)),
-    
-   # div(style="display: inline-block; width: 52%;",
-        radioButtons("search_type", "Search type:",
-                     c("Exact" = "exact","Contains" = "contains"),inline=TRUE),
     
     div(style="display: inline-block; width: 60%;",
         radioButtons("name_type", "Drug name type:",
                      c("Brand Name" = "brand",
                        "Active Ingredient" = "ingredient"))),
-    div(style="display: inline-block; vertical-align:top; width: 52%",
+    conditionalPanel(
+      condition = "input.name_type == 'brand'",
+      # cvshiny_selectinput_UI('search_brand', 'Brand Name (Canadian Trade Name)')),
+      pickerInput("search_brand",
+                  "Select one or multiple Brand Names (Canadian Trade Name)",
+                  c("",topbrands),
+                  options=list(`actions-box`=TRUE,
+                               `live-search`=TRUE,
+                               size=5),
+                  choicesOpt = list(content=stringr::str_trunc(topbrands,width=50)),
+                  multiple = TRUE)),
+    conditionalPanel(
+      condition = "input.name_type == 'ingredient'",
+      textInput('search_drug','Type in an ingredient to get synonyms:',value='Start typing...'),
+      pickerInput("search_ing", 
+                  "Select one or multiple Active Ingredients",
+                  c("Start typing to search..." = ""),
+                  options=list(`actions-box`=TRUE,size=5),
+                  multiple = TRUE)),
+   
+   
+   div(style="display: inline-block; vertical-align:top; width: 52%",
         radioButtons("drug_inv", "Drug Involvement:",
                      c("Suspect",
                        "Concomitant",
@@ -116,7 +120,7 @@ dashboardPage(
     fluidRow(
       box(htmlOutput(outputId = "timeplot_title"),
           #htmlOutput(outputId = "timeplot"),
-          lineChartOutput("mychart"),
+          lineChartOutput("mychart")%>%withSpinner(),
           "Reports by month from Canada Vigilance Adverse Reaction Online Database.",
           downloadLink(outputId = "json_obj",label='Download Raw JSON file'),
           width = 12

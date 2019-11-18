@@ -13,12 +13,39 @@ shinyServer(function(input, output, session) {
   
   
   #Autocomplete suggestions are generated
-  updateSelectizeInput(session, 'search_brand', choices = topbrands, server = TRUE)
-  updateSelectizeInput(session, 'search_ing', choices = topings_cv, server = TRUE)
+  #updateSelectizeInput(session, 'search_brand', choices = topbrands, server = TRUE)
+  #updateSelectizeInput(session, 'search_ing', choices = topings_cv, server = TRUE)
   updateSelectizeInput(session, 'search_rxn', choices = pt_choices, server = TRUE)
   updateSelectizeInput(session, 'search_soc', choices = soc_choices, server = TRUE)
   
   
+  observeEvent(input$search_drug,{
+    
+    onclick("search_drug",updateTextInput(session,"search_drug",value=""))
+    
+    search_text<-input$search_drug
+    text_query<-paste0(search_text,'*')
+    
+    if(input$name_type=='ingredient'){
+      query<-paste0('{
+  "query": {
+    "query_string": {
+      "query":"',text_query,'"
+    }
+  }
+}')
+      
+      list<-Search(index='cv_primary_name',body=query,raw=T,size=500)%>%fromJSON()
+      list<-list$hits$hits$`_source`
+      list<-c(list$primary_name,unlist(list$synonyms))%>%unique()
+      list<-list[!is.na(list)]
+      list<-grep(input$search_drug,list,value=T,ignore.case = T)
+      
+      updatePickerInput(session, 'search_ing', choices = list)
+      
+    }
+    
+  })
   
   ##### Reactive data processing
   # Data structure to store current query info
@@ -74,14 +101,13 @@ shinyServer(function(input, output, session) {
       
       current_search$endDate <- endDate
       
-      current_search$search_type<-input$search_type
       
       #current_search$age_estimate <- input$filter_estimates_age
       
       current_search$uri <- create_uri(current_search$startDate, current_search$endDate, current_search$gender, 
                                        current_search$age, current_search$rxn, current_search$soc, 
                                        current_search$drug_inv, current_search$name, current_search$seriousness_type, 
-                                       current_search$name_type,current_search$search_type)
+                                       current_search$name_type)
       incProgress(4/9, detail = 'Assembling query string')
       # api_key <- api_key
       
@@ -100,7 +126,7 @@ shinyServer(function(input, output, session) {
         current_search$uri <- create_uri(current_search$startDate, current_search$endDate, current_search$gender, 
                                          current_search$age, current_search$rxn, current_search$soc, 
                                          current_search$drug_inv, current_search$name, current_search$seriousness_type, 
-                                         current_search$name_type,current_search$search_type)
+                                         current_search$name_type)
         
       }
 
@@ -244,7 +270,7 @@ shinyServer(function(input, output, session) {
     dateSequence_end <- get_date_sequence_end(current_search$startDate, current_search$endDate, time_period)
     
     data <- get_timechart_data(time_period, dateSequence_start,dateSequence_end, current_search$gender, current_search$age, current_search$rxn,
-                               current_search$soc, current_search$drug_inv, current_search$name, current_search$seriousness_type, current_search$name_type,current_search$search_type)
+                               current_search$soc, current_search$drug_inv, current_search$name, current_search$seriousness_type, current_search$name_type)
     
     
     
