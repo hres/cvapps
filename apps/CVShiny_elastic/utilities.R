@@ -135,12 +135,12 @@ create_uri <- function(startDate, endDate, gender='All', age=c(0, 125), rxn=NULL
   }
 
   if(!is.null(rxn)){
-    search_uri <- paste0(search_uri, ' AND reaction_pt.keyword:', remove_spaces(rxn))
+    search_uri <- paste0(search_uri, ' AND reaction_pt:', remove_spaces(rxn))
   }
     
 
   if(!is.null(soc)) {
-    search_uri <- paste0(search_uri, ' AND reaction_soc.keyword:', remove_spaces(soc))
+    search_uri <- paste0(search_uri, ' AND reaction_soc:', remove_spaces(soc))
   }
 
   
@@ -149,28 +149,28 @@ if(!is.null(drugname)){
   if(drug_inv == 'Concomitant'){
     
       if(search_type== 'brand'){
-        search_uri <- paste0(search_uri, ' AND report_drugname_concomitant.keyword:', remove_spaces(drugname))
+        search_uri <- paste0(search_uri, ' AND report_drugname_concomitant:', remove_spaces(drugname))
       }else{
-        search_uri <- paste0(search_uri, ' AND report_ingredient_concomitant.keyword:', remove_spaces(drugname))
+        search_uri <- paste0(search_uri, ' AND report_ingredient_concomitant:', remove_spaces(drugname))
       }
   }
     
     
   if(drug_inv=='Suspect'){
     if(search_type=='brand'){
-      search_uri <- paste0(search_uri, ' AND report_drugname_suspect.keyword:', remove_spaces(drugname))
+      search_uri <- paste0(search_uri, ' AND report_drugname_suspect:', remove_spaces(drugname))
     }else{
-      search_uri <- paste0(search_uri, ' AND report_ingredient_suspect.keyword:', remove_spaces(drugname))
+      search_uri <- paste0(search_uri, ' AND report_ingredient_suspect:', remove_spaces(drugname))
     }
   }
     
   
   if(drug_inv=='Any'){
     if(search_type=='brand'){
-      search_uri <- paste0(search_uri, ' AND (report_drugname_suspect.keyword:', remove_spaces(drugname),' OR report_drugname_concomitant.keyword:',
+      search_uri <- paste0(search_uri, ' AND (report_drugname_suspect:', remove_spaces(drugname),' OR report_drugname_concomitant:',
                            remove_spaces(drugname),')')
     }else{
-      search_uri <- paste0(search_uri, ' AND (report_ingredient_suspect.keyword:', remove_spaces(drugname),' OR report_ingredient_concomitant.keyword:',
+      search_uri <- paste0(search_uri, ' AND (report_ingredient_suspect:', remove_spaces(drugname),' OR report_ingredient_concomitant:',
                            remove_spaces(drugname),')')
     }
   }

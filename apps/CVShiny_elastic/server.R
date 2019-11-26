@@ -61,13 +61,34 @@ shinyServer(function(input, output, session) {
     withProgress(message = 'Calculation in progress', value = 0, {
       
       if (input$name_type == "brand") {
-        name <- input$search_brand
+        primary_name <- input$search_brand
+        
       } else if (input$name_type == "ingredient") {
         name <- input$search_ing
-      } else {
-        name <- input$search_ing2
+        
+        #insert elastic conversion:
+        if(length(name)>1){
+          primary_name<-or_together(name)
+        }else{
+          primary_name<-paste0('\\\"',name,'\\\"')
+        }
+        
+        
+        query<-paste0('{
+        "query": {
+        "query_string": {
+        "fields":["primary_name.keyword","synonyms.keyword"],
+        "query":"',primary_name,'"
+        }
+       }
+     }')
+        
+        primary_name<-Search(index='cv_primary_name',body=query,raw=T)%>%fromJSON()
+        primary_name<-primary_name$hits$hits$`_source`$primary_name
+        
       }
       
+     
       startDate <- input$daterange[1] %>% ymd(tz = 'EST')
       print(startDate)
       endDate <- input$daterange[2] %>% ymd(tz = 'EST')
@@ -80,7 +101,8 @@ shinyServer(function(input, output, session) {
       
       current_search$name_type <- input$name_type
       
-      current_search$name <- name
+      current_search$name <- primary_name
+      
       
       current_search$drug_inv <- input$drug_inv
       
@@ -108,6 +130,8 @@ shinyServer(function(input, output, session) {
                                        current_search$age, current_search$rxn, current_search$soc, 
                                        current_search$drug_inv, current_search$name, current_search$seriousness_type, 
                                        current_search$name_type)
+      
+      cat(current_search$uri)
       incProgress(4/9, detail = 'Assembling query string')
       # api_key <- api_key
       
