@@ -26,11 +26,11 @@ library(DT)
 library(dplyr)
 library(tidyr)
 library(lubridate)
-library(feather)
 library(RPostgreSQL)
 library(httr)
 library(jsonlite)
 library(elastic)
+#library(rCharts)
 
 
 source("common_ui.R")

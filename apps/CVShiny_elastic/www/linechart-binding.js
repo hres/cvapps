@@ -34,10 +34,9 @@
 		.showLegend(true)
 		.showYAxis(true)
 		.showXAxis(true)
-		.transitionDuration(350)
 		.reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
 		.rotateLabels(0)      //Angle to rotate x-axis labels.
-		.showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+		.showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
 		.groupSpacing(0.1)    //Distance between each group of bars.
 		.stacked(true);
         /*
@@ -59,13 +58,6 @@
 		.axisLabel('Time');
       //.tickFormat(function(d) { return d3.time.format('%b %Y')(new Date(d + 1)); });
       //.tickFormat(d3.format('d'));
-
-         
-        
-     
-      
-
-
  
     chart.yAxis     //Chart y-axis settings
 		.axisLabel('Number of Reports')

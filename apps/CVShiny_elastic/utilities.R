@@ -261,3 +261,28 @@ parse_response <- function(uri){
   return(r)
 }
 
+
+plot_ade<-function(df){
+  
+  annotations <- list()
+  for (i in 1:length(df$Total)) {
+    annotations[[i]] <- list(x = df$time_p[[i]],
+                             y = df$Total[[i]],
+                             text = df$Total[[i]],
+                             yanchor='bottom',
+                             showarrow = FALSE,
+                             textangle=-90
+    )
+    
+  }
+  
+  plot_ly(df,x=~time_p,y=~`Serious(Excluding Death)`,type='bar',name='Serious',marker=list(color='rgb(190,85,4)'))%>%
+    add_trace(y=~`Nonserious`,name='Non-Serious',marker=list(color='rgb(0,100,0)'))%>%
+    add_trace(y=~Death,name='Death',marker=list(color='rgb(141,2,31)'))%>%
+    layout(yaxis = list(title = 'Number of Reports'), 
+           xaxis=list(title='',tickangle=-45,color='grey'),
+           barmode = 'stack',
+           annotations=annotations,
+           legend=list(orientation='h'))
+  
+}

@@ -90,11 +90,11 @@ shinyServer(function(input, output, session) {
       
      
       startDate <- input$daterange[1] %>% ymd(tz = 'EST')
-      print(startDate)
+     
       endDate <- input$daterange[2] %>% ymd(tz = 'EST')
-      print(endDate)
+   
       dateRange <- c(startDate, endDate)
-      print(dateRange)
+   
       
       #search variables
       
@@ -229,8 +229,7 @@ shinyServer(function(input, output, session) {
     drug_name<-paste0(current_search$name,collapse=', ')
     rxn <- paste0(current_search$rxn, collapse = ", ")
     soc <- paste0(current_search$soc, collapse = ", ")
-    # print(rxn)
-    # print(soc)
+  
     if ("" == drug_name) drug_name <- "All Drugs"
     if ("" == rxn) rxn_name <- "All Reactions"
     else rxn_name <- rxn
@@ -277,11 +276,12 @@ shinyServer(function(input, output, session) {
     
   })
   
-  output$mychart <- renderLineChart({
-
-
+  
+  timeplotdata<-reactive({
+    
+    
     two_years <- 730
-
+    
     if ((current_search$endDate - current_search$startDate) >= two_years) {
       time_period <- "year"
       time_function <- function(x) {years(x)}
@@ -304,7 +304,7 @@ shinyServer(function(input, output, session) {
     
     
     rownames(df) <- c()
-
+    
     dateSequence <- dateSequence_start[1:(length(dateSequence_start) - 1)] 
     if(time_period == 'year'){
       dateSequence <- format(as.Date(dateSequence), "%Y")
@@ -315,10 +315,42 @@ shinyServer(function(input, output, session) {
     
     df$time_p <- dateSequence
     df <- df[,c(4,1,2,3)]
-    transform(df, time_p = toString(time_p))
-    print('help')
+    
+    
+    df$Total<-df$`Serious(Excluding Death)`+df$Death+df$Nonserious
+    
     df
+    
+  })
+  
+  output$mychart <- renderPlotly({
 
+    df<-timeplotdata()
+    
+    plot_ade(df)
+    
+    #using rChart to produce NVD3 plot
+    # df<-df%>%gather(type,count,-time_p)
+    # 
+    # p<-nPlot(count ~ time_p, group='type',data=df,type='multiBarChart')
+    # 
+    # p$chart(stacked=TRUE)
+    # p$chart(color=c('rgb(190,85,4)','rgb(141,2,31)','rgb(0,100,0)'))
+    # p$chart(showControls=FALSE)
+    # p$xAxis(axisLabel='Time')
+    # p$yAxis(axisLabel='Number of Reports')
+    # p$params$width<-1400
+
+  })
+  
+  observeEvent(input$toggleAdvanced, {
+    shinyjs::show("hid_table") 
+  })
+   
+  
+  output$table_data<-DT::renderDataTable({
+    
+    timeplotdata()
   })
   
   
@@ -378,7 +410,6 @@ shinyServer(function(input, output, session) {
   output$serioustable    <- renderGvis({
     gvisTable(as.data.frame(seriousplot_data()))
   })
-  
   
   
   ### seriousreasonplot ###
