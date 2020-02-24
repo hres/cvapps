@@ -33,7 +33,7 @@ Columns contain [meddra](https://www.canada.ca/en/health-canada/services/drugs-h
 - [ui.R](apps/CVShiny_api/ui.R) passes search terms to backend and specifies layout of application. linechart.R formats data for linechartbindings.js, which has functions for the [nvd3](http://nvd3.org/index.html) javascript library.
          
 
-## Apps ([apps](shiny.hres.ca/CVShiny)) 
+## Apps ([apps](https://shiny.hres.ca/CVShiny)) 
 (The link only works within Health Canada network)
 > Health Canada data -> Elasticsearch -> API -> R Shiny
 
