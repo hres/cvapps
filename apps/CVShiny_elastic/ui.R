@@ -100,10 +100,17 @@ dashboardPage(
                    "System Organ Class (SOC)",
                    c("Start typing to search..." = ""),
                    multiple = TRUE),
+   
+   radioGroupButtons(inputId='smq_type',
+                        label='SMQ Type',
+                        choices=c('Broad','Narrow','Algorithmic'),
+                        justified = TRUE, status = "info"),
    selectizeInput("search_smq",
                   "Standardised MedDRA Queries (SMQ)",
                   c("Start typing to search..." = ""),
                   multiple = TRUE),
+   
+  
     # cvshiny_selectinput_UI('search_soc', 'System Organ Class'),
     fluidRow(
       column(12,
@@ -130,7 +137,7 @@ dashboardPage(
           "Reports by month from Canada Vigilance Adverse Reaction Online Database.",
           downloadLink(outputId = "json_obj",label='Download Raw JSON file'),
           br(),
-          actionButton(id = "toggleAdvanced", "Show/hide data in the graph"),
+          actionButton("toggleAdvanced", label="Show/hide data in the graph"),
           shinyjs::hidden(
            div(id='hid_table',
                DT::dataTableOutput('table_data')

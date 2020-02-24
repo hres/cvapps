@@ -47,6 +47,61 @@ shinyServer(function(input, output, session) {
     
   })
   
+  
+  observeEvent(input$smq_type,{
+    
+    if(input$smq_type=='Broad'){
+      
+      query<-'{
+  "query":{
+    "query_string":{
+      "query":"meddra_version:22 AND term_scope:1"
+    }
+  },
+  "aggs":{
+    "smq":{
+      "terms":{"field":"smq_name.keyword",
+               "size":500
+      }
+    }
+  }
+}'
+      
+      smq_list<-Search(index='meddra_smq',body=query,size=0)
+      smqs<-sapply(smq_list$aggregations$smq$buckets,'[[','key')
+      
+    }else if(input$smq_type=='Narrow'){
+      
+      query<-'{
+  "query":{
+    "query_string":{
+      "query":"meddra_version:22 AND term_scope:1"
+    }
+  },
+  "aggs":{
+    "smq":{
+      "terms":{"field":"smq_name.keyword",
+               "size":500
+      }
+    }
+  }
+}'
+      
+      smq_list<-Search(index='meddra_smq',body=query,size=0)
+      smqs<-sapply(smq_list$aggregations$smq$buckets,'[[','key')
+      
+      
+    }else{
+      
+      smqs=''
+    }
+    
+    updateSelectizeInput(session, 'search_smq', choices = smqs, server = TRUE)
+    
+    
+    
+  })
+  
   ##### Reactive data processing
   # Data structure to store current query info
   current_search <- reactiveValues()
@@ -344,7 +399,7 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$toggleAdvanced, {
-    shinyjs::show("hid_table") 
+    toggle("hid_table") 
   })
    
   
