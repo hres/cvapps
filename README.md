@@ -14,10 +14,10 @@ Under [apps folder](apps) , there are 3 versions of cvapps.
 
 ## Data model
 
-#####Schema: current
+#### Schema: current
 Tables were originally stored on a Postgrel relational database. The data were transformed into JSON objects and indexed in Elasticsearch.
 
-#####Schema: meddra
+#### Schema: meddra
 
 Tables: Dynamically named table based on latest version in the history table of the date_refresh table. Version 20.1 will have a table name v_21_0.
 Columns contain [meddra](https://www.canada.ca/en/health-canada/services/drugs-health-products/medeffect-canada/adverse-reaction-database/about-medical-dictionary-regulatory-activities-canada-vigilance-adverse-reaction-online-database.html) hierarchy, a controlled vocabulary of medical terms for regulatory purposes.
@@ -33,7 +33,8 @@ Columns contain [meddra](https://www.canada.ca/en/health-canada/services/drugs-h
 - [ui.R](apps/CVShiny_api/ui.R) passes search terms to backend and specifies layout of application. linechart.R formats data for linechartbindings.js, which has functions for the [nvd3](http://nvd3.org/index.html) javascript library.
          
 
-## Apps ([apps](apps/CVShiny_api))
+## Apps ([apps](shiny.hres.ca/CVShiny)) 
+(The link only works within Health Canada network)
 > Health Canada data -> Elasticsearch -> API -> R Shiny
 
 These are used for exploring and analyzing the data.
